@@ -29,51 +29,45 @@ class JSONController {
         } else {
             System.out.println("The movie you are looking for is not exist");
             return null;        }
-    }
-//get the JSON file from rottentomato and send to resealt checker method returns a List of options
-List<MOVIEObject> getMovieDetails(){
+   }
+    //get the JSON file from rottentomato and send to resealt checker method returns a List of options
+    protected List<MOVIEObject> getMovieDetails(){
         JSONObject jsonObject= null;
         try {
-            jsonObject = new JSONObject(readUrl(LinkMaker(nameMaker(MovieName, "search"))));
+            jsonObject = new JSONObject(readUrl(LinkMaker(nameMaker(MovieName,"search"))));
         } catch (Exception e) {
             e.printStackTrace();
         }
         if ((Integer)jsonObject.get("total")!=0){
-        JSONArray movies=jsonObject.getJSONArray("movies");
-            return getBestResults(movies);}else{
+            JSONArray movies=jsonObject.getJSONArray("movies");
+            return getResults(movies);
+        }else{
             return null;
         }
 
     }
-//choose the best result and return a set of clean List file
-List<MOVIEObject> getBestResults(JSONArray movies){
+    //choose the best result and return a set of clean List file
+    protected List<MOVIEObject> getResults(JSONArray movies){
         MOVIEObject movie=new MOVIEObject();
         List<MOVIEObject> items=new ArrayList<MOVIEObject>();
-
-        outerlopp:
         for (int i = 0; i < movies.length(); i++) {
             movie=detailSetter(movies.getJSONObject(i));
-            if (movie.getName().toLowerCase().equals(nameMaker(MovieName, "comprise"))) {
-                if (items!=null)
-                    items.clear();
                 items.add(movie);
-                break outerlopp;
-            }else {
-                items.add(movie);
-            }
         }
         return items;
     }
-//setting the JSON data into List customised object
+    //setting the JSON data into List customised object
     private MOVIEObject detailSetter(JSONObject movie){
         MOVIEObject item=new MOVIEObject();
         item.setName((String) movie.get("title"));
         item.setYear((Integer) movie.get("year"));
         item.setThumbail((String) movie.getJSONObject("posters").get("thumbnail"));
         item.setReleaseDate(setReDate(movie));
+        item.setAudience_score((Integer)movie.getJSONObject("ratings").get("audience_score"));
+        item.setCritics_score((Integer)movie.getJSONObject("ratings").get("critics_score"));
         return item;
     }
-//checking if the released data exist
+    //checking if the released data exist
     private String setReDate(JSONObject object){
         String result = null;
         try {
@@ -83,7 +77,7 @@ List<MOVIEObject> getBestResults(JSONArray movies){
         }
             return result;
     }
-//get the JSON file from website
+    //get the JSON file from website
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
         try {
@@ -101,16 +95,16 @@ List<MOVIEObject> getBestResults(JSONArray movies){
                 reader.close();
         }
     }
-//make the search link
-String LinkMaker(String name){
-    String searchLink = "http://api.rottentomatoes.com";
-    String SERACH_KEY = "/api/public/v1.0/movies.json?q=";
-    String QUERY_KEY = "qg9hr2mprfs5sj938rwsjdqc";
-    String LIMITS_KEY = "&page_limit=10&page=1&apikey=";
-    return searchLink + SERACH_KEY +name+ LIMITS_KEY + QUERY_KEY;
+    //make the search link
+    protected String LinkMaker(String name){
+        String searchLink = "http://api.rottentomatoes.com";
+        String SERACH_KEY = "/api/public/v1.0/movies.json?q=";
+        String QUERY_KEY = "qg9hr2mprfs5sj938rwsjdqc";
+        String LIMITS_KEY = "&page_limit=10&page=1&apikey=";
+        return searchLink + SERACH_KEY +name+ LIMITS_KEY + QUERY_KEY;
     }
-//Modify the name and check if it is valid
-String nameMaker(String name, String Tag){
+    //Modify the name and check if it is valid ( not using currently )
+ protected String nameMaker(String name, String Tag){
         if (Tag.equals("comprise")) {
             name=name.trim().replaceAll("[^\\dA-Za-z]"," ").toLowerCase();
         } else if (Tag.equals("search")) {

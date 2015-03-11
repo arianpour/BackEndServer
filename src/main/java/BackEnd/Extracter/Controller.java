@@ -33,7 +33,7 @@ protected getTorrent LinkMagnet=new getTorrent(magnet);
                         magnet= thePage.linkFinder("magnet");
                         System.out.println(magnet);
                         System.out.println(aList.getObjectId("_id").toString());
-                        System.out.println(new dbAdapter().insertdata(magnet,aList.getObjectId("_id")).getMatchedCount());
+                        System.out.println(new dbAdapter().insertMagnet(magnet, aList.getObjectId("_id")).getMatchedCount());
                         break;
                     }catch (IOException e){
                         System.out.print("TAG : "+e);
