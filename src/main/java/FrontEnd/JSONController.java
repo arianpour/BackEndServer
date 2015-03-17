@@ -16,6 +16,7 @@ import java.util.List;
  * the results are Movie name,release date in theater,thumbnail , year Made
  */
 class JSONController {
+    public static final String THE_MOVIE_YOU_ARE_LOOKING_FOR_IS_NOT_EXIST = "The movie you are looking for is not exist";
     private String MovieName=null;
 
     public JSONController(String movieName) {
@@ -27,7 +28,7 @@ class JSONController {
         if (mObjects != null) {
             return mObjects;
         } else {
-            System.out.println("The movie you are looking for is not exist");
+            System.out.println(THE_MOVIE_YOU_ARE_LOOKING_FOR_IS_NOT_EXIST);
             return null;        }
    }
     //get the JSON file from rottentomato and send to resealt checker method returns a List of options

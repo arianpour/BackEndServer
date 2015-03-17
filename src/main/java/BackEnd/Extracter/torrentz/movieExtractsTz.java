@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class movieExtractsTz {
+    public static final String THE_LINKSFINAL_IS_NULL = "the linksfinal is null";
+    public static final String THATS_SAD = "Thats sad";
     private String movieName=null;
     private int movieYear=0;
     private final String sUrl= new TzConst().getTzUrl();
@@ -33,10 +35,10 @@ public class movieExtractsTz {
                         if (link!=null) {
                             return mainExtracter(linkcreater(link,null,0),regex1, 0,new TzConst().webLists,null);
                         }else{
-                            System.out.println("the linksfinal is null");
+                            System.out.println(THE_LINKSFINAL_IS_NULL);
                         }
                 }
-            }else { System.out.print("Thats sad");}
+            }else { System.out.print(THATS_SAD);}
         return null;
     }
 
