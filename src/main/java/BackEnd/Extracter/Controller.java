@@ -19,7 +19,7 @@ protected getTorrent LinkMagnet=new getTorrent(magnet);
         this.mLists = mList;
     }
 // --Commented out by Inspection STOP (2/20/15 9:27 AM)
-    public void startExtract() {
+    public boolean startExtract() {
         while(mLists.hasNext() ){
             Document aList= (Document) mLists.next();
             switch (aList.get("type").toString()){
@@ -31,10 +31,13 @@ protected getTorrent LinkMagnet=new getTorrent(magnet);
                         System.out.println(pageUrl);
                         TorrentPage thePage=new TorrentPage(pageUrl,"a[href]");
                         magnet= thePage.linkFinder("magnet");
+                        if (magnet==null){
+                            return false;
+                        }else {
                         System.out.println(magnet);
                         System.out.println(aList.getObjectId("_id").toString());
                         System.out.println(new dbAdapter().insertMagnet(magnet, aList.getObjectId("_id")).getMatchedCount());
-                        break;
+                        return true;}
                     }catch (IOException e){
                         System.out.print("TAG : "+e);
                    }
@@ -45,6 +48,7 @@ protected getTorrent LinkMagnet=new getTorrent(magnet);
                     break;
             }
         }
+        return true;
     }
     String nameModifider(String name){
         return name.replaceAll(" ","+");

@@ -31,8 +31,8 @@ public class dbAdapter {
     }
 //// --Commented out by Inspection STOP (2/20/15 9:27 AM)
 //inset data into database for progress
-    public void insertData(String name,int year,int flag,String type,
-                                   String thumbnail,String releaseDate){
+    public ObjectId insertData(String name, int year, int flag, String type,
+                               String thumbnail, String releaseDate){
 
         Document doc=new Document("name",name)
                 .append("year",year)
@@ -41,7 +41,9 @@ public class dbAdapter {
                 .append("thumbnail",thumbnail)
                 .append("releaseDate",releaseDate);
        collection.insertOne(doc);
-
+        //TODO:return just added items document id
+        ObjectId id=(ObjectId)doc.get("_id");
+        return id;
     }
     public UpdateResult insertMagnet(String magnet, ObjectId id){
         UpdateResult result=null;
@@ -52,17 +54,20 @@ public class dbAdapter {
     public Iterator<Document> getAllflag(int flag){
         return collection.find(new Document("flag",flag)).iterator();
     }
+    public Iterator<Document> getById(ObjectId id){
+        return collection.find(new Document("_id",id)).iterator();
+    }
 //
     public boolean setUpdater(String id, int flag){
         UpdateResult res= collection.updateOne(new Document("_id", id), new Document("$set", new Document("flag", flag)));
         return res.wasAcknowledged();
     }
-    public String getid(String element,String obj,String rElement){
-        Document doc=collection.find(new Document(element,obj)).first();
+    public String getid(String DocumentField,String value,String returnField){
+        Document doc=collection.find(new Document(DocumentField,value)).first();
         if (doc!=null){
-            return doc.get(rElement).toString();
-        }
-        return null;
+            return doc.get(returnField).toString();
+        }else
+            return null;
     }
 //    public boolean itemChecker(String element,)
 

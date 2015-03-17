@@ -1,6 +1,7 @@
 package FrontEnd;
 
 import BackEnd.db.dbAdapter;
+import org.bson.types.ObjectId;
 
 /**
  * insert clean data into database for extracting progress
@@ -8,9 +9,11 @@ import BackEnd.db.dbAdapter;
  */
 public class dbHandler {
 
-    public void movieInserter(MOVIEObject obj){
+    public ObjectId movieInserter(MOVIEObject obj){
         dbAdapter db=new dbAdapter();
-        db.insertData(obj.getName(), obj.getYear(), 1, "movie", obj.getThumbail(), obj.getReleaseDate());
+        return db.insertData(obj.getName(), obj.getYear(), 1,
+                "movie", obj.getThumbail(), obj.getReleaseDate());
+
     }
     public boolean duplicateChecker(String name,int year) {
         dbAdapter db = new dbAdapter();
